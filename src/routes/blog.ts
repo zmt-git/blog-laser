@@ -2,6 +2,17 @@ import { Router } from 'express'
 import blog from '../controller/blog'
 const router = Router()
 
+
+/**
+ * @api {get} /blog/getInfo 博客详情
+ * @apiGroup Blog
+ * @apiDescription 获取博客详情
+ * @apiParam {Number} id 博客id
+ * @apiSampleRequest /blog/getInfo
+ * @apiHeader {String} authorization token
+ * @apiVersion 1.0.0
+ * */
+router.get('/getInfo', blog.getInfo)
 /**
  * @api {get} /blog/page 分页查询博客文章
  * @apiGroup Blog
@@ -64,7 +75,7 @@ router.delete('/del', blog.del)
  * @apiSampleRequest http://127.0.0.1:3000/blog/read
  * @apiVersion 1.0.0
  * */
-router.post('/read', blog.read)
+router.post('/read', blog.read.bind(blog))
 
 /**
  * @api {post} /blog/like 收藏文章
@@ -75,6 +86,6 @@ router.post('/read', blog.read)
  * @apiHeader {String} [authorization= Bearer]
  * @apiVersion 1.0.0
  * */
-router.post('/like', blog.like)
+router.post('/like', blog.like.bind(blog))
 
 export default router

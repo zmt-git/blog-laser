@@ -9,19 +9,22 @@ export default class Blog {
   @Column({ type: "varchar", length: 100, comment: '文章标题'})
   title!: string
 
-  @Column({ type: "varchar", length: 200, comment: '文章图片描述'})
+  @Column({ type: "varchar", length: 200, comment: '文章图片描述', nullable: true })
   img!: string
 
   @Column({ name: 'read_num', type: "int", comment: '阅读数量', default: 0 })
   readNum!: number
 
-  @Column({ type: "int", comment: '点赞数量', default: 0})
+  @Column({ name: 'comment_num', type: "int", comment: '评论数量', default: 0})
+  commentNum!: number
+
+  @Column({ type: "int", comment: '点赞数量', default: 0 })
   like!: number
 
-  @Column({ name: 'author_id', type: "int", comment: '文章作者'})
+  @Column({ name: 'author_id', type: "int", comment: '文章作者' })
   authorId!: number
 
-  @Column({ name: 'category_id', type: "int", comment: '文章分类'})
+  @Column({ name: 'category_id', type: "int", comment: '文章分类', nullable: true  })
   categoryId!: number
 
   @Column({ type: "text", comment: '文章内容'})

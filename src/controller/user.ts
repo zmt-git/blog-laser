@@ -12,6 +12,7 @@ class User {
     try {
       const result = await getRepository(UserEntity)
         .createQueryBuilder('user')
+        .select(["user.id", "user.name"])
         .getMany()
 
       res.send(new SuccessModel(result))

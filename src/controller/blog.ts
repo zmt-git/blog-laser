@@ -6,6 +6,9 @@ import BlogValidate from '../validate/blog'
 import BlogEntity from "../entity/blog";
 import { error400 }  from '../utils/http400';
 import { Token } from '../types/token'
+
+type Key = keyof BlogEntity
+
 class Blog {
   async page (req: Request, res: Response, next: NextFunction) {
     const { error, value } = Common.Page.validate(req.query)
@@ -101,7 +104,7 @@ class Blog {
     }
   }
 
-  async read (req: Request, res: Response, next: NextFunction) {
+  async updateFn (req: Request, res: Response, next: NextFunction, key: Key = 'like') {
     const { error, value } = BlogValidate.BlogId.validate(req.query)
 
     if (error) {
@@ -115,11 +118,12 @@ class Blog {
         .where('blog.id = :id', { id: value.id })
         .getOne()
       if (target) {
-        const readNum = target?.readNum
+        const num = target[key] as number
+
         await getRepository(BlogEntity)
           .createQueryBuilder('blog')
           .update()
-          .set({ readNum: readNum + 1 })
+          .set({ [key]: num + 1 })
           .where('blog.id = :id', { id: value.id })
           .execute()
       } else {
@@ -134,7 +138,15 @@ class Blog {
     }
   }
 
+  async read (req: Request, res: Response, next: NextFunction) {
+    await this.updateFn(req, res, next, 'readNum')
+  }
+
   async like (req: Request, res: Response, next: NextFunction) {
+    await this.updateFn(req, res, next, 'like')
+  }
+
+  async getInfo (req: Request, res: Response, next: NextFunction) {
     const { error, value } = BlogValidate.BlogId.validate(req.query)
 
     if (error) {
@@ -143,24 +155,12 @@ class Blog {
     }
 
     try {
-      const target = await getRepository(BlogEntity)
+      const result = await getRepository(BlogEntity)
         .createQueryBuilder('blog')
         .where('blog.id = :id', { id: value.id })
         .getOne()
-      if (target) {
-        const like = target?.like
-        await getRepository(BlogEntity)
-          .createQueryBuilder('blog')
-          .update()
-          .set({ like: like + 1 })
-          .where('blog.id = :id', { id: value.id })
-          .execute()
-      } else {
-        res.status(409).send('文章不存在')
-        return
-      }
 
-      res.send(new SuccessModel())
+      res.send(new SuccessModel(result))
     } catch (e) {
       res.status(500).send(e)
       console.log(e)
