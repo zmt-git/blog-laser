@@ -119,13 +119,15 @@ class Blog {
         .getOne()
       if (target) {
         const num = target[key] as number
-
-        await getRepository(BlogEntity)
-          .createQueryBuilder('blog')
-          .update()
-          .set({ [key]: num + 1 })
-          .where('blog.id = :id', { id: value.id })
-          .execute()
+        const isUpdate = new Date(target.updateTime).getTime() + 5 * 60 * 1000 > new Date(req.headers.date as string).getTime() || target[key] === 0
+        if (isUpdate) {
+          await getRepository(BlogEntity)
+            .createQueryBuilder('blog')
+            .update()
+            .set({ [key]: num + 1 })
+            .where('blog.id = :id', { id: value.id })
+            .execute()
+        }
       } else {
         res.status(409).send('文章不存在')
         return

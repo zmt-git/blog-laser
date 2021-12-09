@@ -9,7 +9,7 @@ import {Token} from "../types/token";
 class UserFollow {
   // 1-关注 0-取消关注
   async like (req: Request, res: Response, next: NextFunction) {
-    const { error, value } = UserFollowValidate.followId.validate(req.query)
+    const { error, value } = UserFollowValidate.userId.validate(req.query)
 
     if (error) {
       error400(res, error)
@@ -23,7 +23,7 @@ class UserFollow {
         await getRepository(UserFollowEntity)
           .createQueryBuilder('userFollow')
           .insert()
-          .values({ userId: reqUser.userId, followId: value.followId })
+          .values({ userId: value.userId , followId: reqUser.userId })
           .execute()
       } else {
         await getRepository(UserFollowEntity)

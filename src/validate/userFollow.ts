@@ -1,8 +1,8 @@
 import Joi from 'joi'
 
 export default class UserFollow {
-  static followId = Joi.object({
-    followId: Joi.number(),
+  static userId = Joi.object({
+    userId: Joi.number().required(),
     like: Joi.number().required()
   })
 }

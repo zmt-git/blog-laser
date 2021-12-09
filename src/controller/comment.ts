@@ -45,7 +45,7 @@ class Comment {
 
   // 获取
   async get (req: Request, res: Response, next: NextFunction) {
-    const { error, value } = CommentValidate.BlogId.validate(req.body)
+    const { error, value } = CommentValidate.BlogId.validate(req.query)
 
     if (error) {
       error400(res, error)

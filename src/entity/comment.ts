@@ -15,9 +15,9 @@ export default class Comment {
   @Column({ type: "varchar", length: 2000, comment: '评论内容'})
   content!: string
 
-  @CreateDateColumn({ name: 'create_time', type: "timestamp", comment: '创建时间'})
-  createTime!: number
-
   @Column({ name: 'user_id_parent', type: "int", comment: '回复人id'})
   userIdParent!: number
+
+  @CreateDateColumn({ name: 'create_time', type: "timestamp", comment: '创建时间'})
+  createTime!: number
 }

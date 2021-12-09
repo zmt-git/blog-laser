@@ -30,9 +30,9 @@ export default class Blog {
   @Column({ type: "text", comment: '文章内容'})
   content!: string
 
-  @CreateDateColumn({ name: 'create_time', type: "datetime", comment: '文章创建时间'})
-  createTime!: number
+  @CreateDateColumn({ name: 'create_time', type: "timestamp", comment: '文章创建时间'})
+  createTime!: Date
 
-  @UpdateDateColumn({ name: 'update_time', type: "datetime"  ,comment: '文章更新时间'})
-  updateTime!: number
+  @UpdateDateColumn({ name: 'update_time', type: "timestamp", comment: '文章更新时间'})
+  updateTime!: Date
 }
